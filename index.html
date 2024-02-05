@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File Exchange</title>
+</head>
+<body>
+  <h1>File Exchange</h1>
+  
+  <form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <button type="submit">Upload File</button>
+  </form>
+
+  <h2>Uploaded Files:</h2>
+  <ul id="fileList"></ul>
+
+  <script>
+    async function fetchFiles() {
+      const response = await fetch('/files');
+      const data = await response.json();
+      const fileList = document.getElementById('fileList');
+
+      fileList.innerHTML = '';
+
+      data.files.forEach(file => {
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `
+          ${file}
+          <a href="/download/${file}" target="_blank">Download</a>
+          <a href="/delete/${file}">Delete</a>
+        `;
+        fileList.appendChild(listItem);
+      });
+    }
+
+    fetchFiles();
+  </script>
+</body>
+</html>
